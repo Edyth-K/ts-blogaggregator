@@ -1,11 +1,12 @@
 import { readConfig } from "./config.js";
 import { CommandsRegistry, registerCommand, runCommand } from "./commands/commands.js";
-import { handlerLogin } from "./commands/users.js";
+import { handlerLogin, handlerRegister } from "./commands/users.js";
 
-function main() {
+async function main() {
     
     const registry: CommandsRegistry = {};
     registerCommand(registry, "login", handlerLogin);
+    registerCommand(registry, "register", handlerRegister);
 
     const args = process.argv.slice(2);
     if (args.length === 0) {
@@ -14,9 +15,19 @@ function main() {
     }
     const cmdName = args[0];
     const cmdArgs = args.slice(1);
-    runCommand(registry, cmdName, ...cmdArgs)
 
-    console.log(readConfig());
+    try {
+        await runCommand(registry, cmdName, ...cmdArgs);
+    } catch (err) {
+        if (err instanceof Error) {
+            console.error(`Error running command ${cmdName}: ${err.message}`);
+        } else {
+            console.error(`Error running command ${cmdName}: ${err}`);
+        }
+        process.exit(1);
+    }
+    
+    process.exit(0)
 }
 
 main();
