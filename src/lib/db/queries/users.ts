@@ -1,6 +1,6 @@
 import { db } from "..";
 import { users } from "../schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export async function createUser(name: string) {
     const nameExists = await getUser(name);
@@ -18,4 +18,8 @@ export async function getUser(name: string) {
         return undefined;
     }
     return result;
+}
+
+export async function reset() {
+    await db.execute(sql`TRUNCATE TABLE users`);
 }
