@@ -1,6 +1,6 @@
 import { setUser, readConfig } from "src/config.js"
 import { createUser, getUser, reset, getUsers } from "src/lib/db/queries/users.js";
-
+import { fetchFeed } from "src/lib/rss.js";
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
    if (args.length === 0) {
@@ -26,7 +26,7 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
    console.log(user);
 }
 
-export async function handleReset(cmdName: string, ...args: string[]) {
+export async function handlerReset(cmdName: string, ...args: string[]) {
    await reset();
    console.log("Database reset successfully.");
 }
@@ -42,4 +42,10 @@ export async function handlerUsers(cmdName: string, ...args: string[]) {
          console.log(`* ${user}`);
       }
    }
+}
+
+export async function handlerAgg(cmdName: string, ...args: string[]) {
+   const feedURL = "https://www.wagslane.dev/index.xml";
+   const feed = await fetchFeed(feedURL);
+   console.log(JSON.stringify(feed, null, 2));
 }
