@@ -8,6 +8,13 @@
       "when": 1775934786168,
       "tag": "0000_white_magdalene",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776283247523,
+      "tag": "0001_awesome_valeria_richards",
+      "breakpoints": true
     }
   ]
 }

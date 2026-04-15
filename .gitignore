@@ -14,6 +14,7 @@ build/
 logs/
 *.log
 npm-debug.log*
+todo.md
 
 # Runtime
 *.js.map
@@ -28,3 +29,5 @@ Thumbs.db
 
 # Config Data
 .gatorconfig.json
+
+scratch.ts
