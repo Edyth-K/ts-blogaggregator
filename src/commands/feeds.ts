@@ -1,7 +1,17 @@
 import { readConfig } from "src/config.js"
 import { getUser } from "src/lib/db/queries/users.js";
-import { createFeed } from "src/lib/db/queries/feeds.js";
+import { createFeed, getFeeds } from "src/lib/db/queries/feeds.js";
 import { Feed, User } from "src/lib/db/schema.js";
+
+export async function handlerFeeds(cmdName: string, ...args: string[]) {
+    const feeds = await getFeeds();
+    if (!feeds) {
+        throw new Error("invalid feeds");
+    }
+    for (const feed of feeds) {
+        console.log(feed);
+    }
+}
 
 export async function handlerAddFeed(cmdName: string, ...args: string[]) {
    if (args.length !== 2) {

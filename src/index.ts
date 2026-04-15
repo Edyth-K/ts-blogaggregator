@@ -1,6 +1,6 @@
 import { CommandsRegistry, registerCommand, runCommand } from "./commands/commands.js";
 import { handlerAgg } from "./commands/aggregate.js"
-import { handlerAddFeed } from "./commands/feeds.js";
+import { handlerAddFeed, handlerFeeds } from "./commands/feeds.js";
 import { handlerReset } from "./commands/reset.js"
 import { handlerLogin, handlerRegister, handlerUsers } from "./commands/users.js"
 async function main() {
@@ -12,6 +12,7 @@ async function main() {
     registerCommand(registry, "users", handlerUsers);
     registerCommand(registry, "agg", handlerAgg);
     registerCommand(registry, "addfeed", handlerAddFeed);
+    registerCommand(registry, "feeds", handlerFeeds);
 
     const args = process.argv.slice(2);
     if (args.length === 0) {
