@@ -1,7 +1,5 @@
-import { readConfig } from "src/config.js";
-import { createFeedFollow, getFeedFollowsForUser } from "src/lib/db/queries/feed-follows.js";
+import { createFeedFollow, deleteFeedFollow, getFeedFollowsForUser } from "src/lib/db/queries/feed-follows.js";
 import { getFeedByUrl } from "src/lib/db/queries/feeds.js";
-import { getUser } from "src/lib/db/queries/users";
 import { User } from "src/lib/db/schema.js";
 
 
@@ -29,4 +27,16 @@ export async function handlerFollowing(cmdName: string, user: User, ...args: str
     for (const feedFollow of feedFollows) {
         console.log(feedFollow.feedName);
     }
+}
+
+
+export async function handlerUnfollow(cmdName: string, user: User, ...args: string[]) {
+    if (args.length !== 1) {
+        throw new Error(`Unfollow command only takes in 1 argument: url`);
+    }
+    const userId = user.id;
+    const feedUrl = args[0];
+    await deleteFeedFollow(userId, feedUrl);
+    console.log(`User: ${user.name} unfollowed feed: ${feedUrl}`);
+    
 }
