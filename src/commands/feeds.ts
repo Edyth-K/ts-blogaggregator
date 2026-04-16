@@ -2,6 +2,7 @@ import { readConfig } from "src/config.js"
 import { getUser } from "src/lib/db/queries/users.js";
 import { createFeed, getFeeds } from "src/lib/db/queries/feeds.js";
 import { Feed, User } from "src/lib/db/schema.js";
+import { createFeedFollow } from "src/lib/db/queries/feed-follows";
 
 export async function handlerFeeds(cmdName: string, ...args: string[]) {
     const feeds = await getFeeds();
@@ -30,6 +31,7 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]) {
    if (!feed) {
       throw new Error("feed was invalid");
    }
+   await createFeedFollow(userId, feed.id);
    printFeed(feed, user);
 }
 
