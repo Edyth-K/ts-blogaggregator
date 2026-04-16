@@ -2,18 +2,16 @@ import { readConfig } from "src/config.js";
 import { createFeedFollow, getFeedFollowsForUser } from "src/lib/db/queries/feed-follows.js";
 import { getFeedByUrl } from "src/lib/db/queries/feeds.js";
 import { getUser } from "src/lib/db/queries/users";
+import { User } from "src/lib/db/schema.js";
 
 
-export async function handlerFollow(cmdName: string, ...args: string[]) {
+export async function handlerFollow(cmdName: string, user: User, ...args: string[]) {
     if (args.length !== 1) {
         throw new Error("follow command should only have 1 argument: url");
     }
     const url = args[0];
     const feed = await getFeedByUrl(url);
     const feedId = feed.id;
-
-    const config = readConfig();
-    const user = await getUser(config.currentUserName);
     const userId = user.id;
 
     const newFollow = await createFeedFollow(userId, feedId);
@@ -22,9 +20,8 @@ export async function handlerFollow(cmdName: string, ...args: string[]) {
 
 }
 
-export async function handlerFollowing(cmdName: string, ...args: string[]) {
-    const config = readConfig();
-    const user = await getUser(config.currentUserName);
+export async function handlerFollowing(cmdName: string, user: User, ...args: string[]) {
+
     const userId = user.id;
 
     const feedFollows = await getFeedFollowsForUser(userId);

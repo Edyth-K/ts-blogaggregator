@@ -1,5 +1,3 @@
-import { readConfig } from "src/config.js"
-import { getUser } from "src/lib/db/queries/users.js";
 import { createFeed, getFeeds } from "src/lib/db/queries/feeds.js";
 import { Feed, User } from "src/lib/db/schema.js";
 import { createFeedFollow } from "src/lib/db/queries/feed-follows";
@@ -14,17 +12,11 @@ export async function handlerFeeds(cmdName: string, ...args: string[]) {
     }
 }
 
-export async function handlerAddFeed(cmdName: string, ...args: string[]) {
+export async function handlerAddFeed(cmdName: string, user: User, ...args: string[]) {
    if (args.length !== 2) {
       throw new Error("invalid number of arguments");
    }
    const [name, url] = args;
-
-   const config = readConfig();
-   const user = await getUser(config.currentUserName);
-   if (!user) {
-      throw new Error("User not found, please login");
-   }
    const userId = user.id;
 
    const feed = await createFeed(name, url, userId);
