@@ -29,6 +29,13 @@
       "when": 1776360155974,
       "tag": "0003_hard_black_cat",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776381638670,
+      "tag": "0004_stormy_cargill",
+      "breakpoints": true
     }
   ]
 }

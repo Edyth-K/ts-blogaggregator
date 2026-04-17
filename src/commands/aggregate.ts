@@ -1,5 +1,6 @@
 import { getNextFeedToFetch, markFeedFetched } from "src/lib/db/queries/feeds.js";
 import { fetchFeed } from "src/lib/rss.js";
+import { createPost } from "src/lib/db/queries/posts.js";
 
 export async function handlerAgg(cmdName: string, ...args: string[]) {
    if (args.length !== 1) {
@@ -27,12 +28,25 @@ async function scrapeFeeds() {
       console.log("No feeds to fetch.");
       return;
    }
-   const nextFeedId = nextFeed.id
-   await markFeedFetched(nextFeedId);
+   await markFeedFetched(nextFeed.id);
    const feed = await fetchFeed(nextFeed.url);
-   const items = feed.channel.item;
-   for (const item of items) {
-      console.log(item.title);
+   for (const item of feed.channel.item) {
+      try {
+         await createPost({
+            title: item.title,
+            url: item.link,
+            description: item.description,
+            publishedAt: item.pubDate ? new Date(item.pubDate) : null,
+            feedId: nextFeed.id,
+         });
+         console.log(`Saved post: ${item.title}`);
+      } catch (err) {
+         // skip duplicate URLs silently
+         if (err instanceof Error && err.message.includes("unique")) {
+            continue;
+         }
+         throw err;
+      }
    }
 }
 
